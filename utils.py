@@ -10,9 +10,9 @@ def process_files():
 
     # All books
     books = [
-        "La_venganza_de_Don_Mendo_es",
-        "O_Mysterio_da_Estrada_de_Cintra_pt",
-        "The_Tragedy_of_Romeo_and_Juliet_en",
+        "La venganza de Don Mendo es",
+        "O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias pt",
+        "The Tragedy of Romeo and Juliet en",
     ]
     processed_books = {}
 
@@ -27,6 +27,8 @@ def process_files():
         stopwords = load_stopwords(lang)
 
         with open("Project_Gutenberg/" + book + ".txt", encoding="utf8") as file:
+            book = book[:-3]
+
             text = file.read()
 
             # Keep track of initial length (before processing)
@@ -52,7 +54,7 @@ def process_files():
             # Remove all non-alphanumeric characters
             for char in text:
                 if not char.isalpha() and char != " ":
-                    text = text.replace(char, "")
+                    text = text.replace(char, " ")
 
             # Remove all stopwords and whitespaces without nltk
             text = " ".join(

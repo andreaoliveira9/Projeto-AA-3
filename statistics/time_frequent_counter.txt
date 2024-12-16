@@ -1,0 +1,13 @@
+Title                                    Time                      k         
+La venganza de Don Mendo:                0.0018541812896728516     5         
+La venganza de Don Mendo:                0.001894235610961914      10        
+La venganza de Don Mendo:                0.0019109249114990234     15        
+La venganza de Don Mendo:                0.0019669532775878906     20        
+O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias: 0.0063741207122802734     5         
+O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias: 0.006109952926635742      10        
+O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias: 0.006128787994384766      15        
+O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias: 0.006330013275146484      20        
+The Tragedy of Romeo and Juliet:         0.0023920536041259766     5         
+The Tragedy of Romeo and Juliet:         0.0023822784423828125     10        
+The Tragedy of Romeo and Juliet:         0.002443075180053711      15        
+The Tragedy of Romeo and Juliet:         0.0024750232696533203     20        

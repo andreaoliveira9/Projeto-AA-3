@@ -1,4 +1,4 @@
 Title                                    Time                     
-La_venganza_de_Don_Mendo_es:             0.0011839866638183594    
-O_Mysterio_da_Estrada_de_Cintra_pt:      0.003335237503051758     
-The_Tragedy_of_Romeo_and_Juliet_en:      0.0011839866638183594    
+La venganza de Don Mendo:                0.0009558200836181641    
+O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias: 0.0030183792114257812    
+The Tragedy of Romeo and Juliet:         0.0010771751403808594    
