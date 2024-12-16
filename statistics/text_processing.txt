@@ -1,0 +1,4 @@
+Title                                    Initial Length            Final Length
+La_venganza_de_Don_Mendo_es              150718                    89105
+O_Mysterio_da_Estrada_de_Cintra_pt       420183                    282973
+The_Tragedy_of_Romeo_and_Juliet_en       155207                    94989
