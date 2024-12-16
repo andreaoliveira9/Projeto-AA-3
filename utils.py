@@ -1,4 +1,5 @@
 import string
+import os
 
 
 def load_stopwords(lang):
@@ -9,11 +10,8 @@ def load_stopwords(lang):
 def process_files():
 
     # All books
-    books = [
-        "La venganza de Don Mendo es",
-        "O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias pt",
-        "The Tragedy of Romeo and Juliet en",
-    ]
+    books = [book.replace(".txt", "") for book in os.listdir("Project_Gutenberg")]
+
     processed_books = {}
 
     # File to keep track of text processing

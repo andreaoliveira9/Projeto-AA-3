@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     # Open file to store time statistics
     stats = open("statistics/time_approximate_counter.txt", "w", encoding="utf-8")
-    stats.write(f'{"Title":<40} {"Time":<25}\n')
+    stats.write(f'{"Title":<80} {"Time":<25}\n')
 
     # Set number of trials
     n_trials = 10000
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     for title in streams:
 
         file = open(
-            "counters/approximate_counters/" + title + ".txt", "w", encoding="utf-8"
+            "counters/approximate_counter/" + title + ".txt", "w", encoding="utf-8"
         )
         avg_time = 0
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
             avg_time += processing_time
 
         # Store average processing time
-        stats.write(f'{title + ":":<40} {avg_time / n_trials:<25}\n')
+        stats.write(f'{title + ":":<80} {avg_time / n_trials:<25}\n')
 
         file.close()
 

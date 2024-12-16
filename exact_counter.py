@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     # Open file to store time statistics
     stats = open("statistics/time_exact_counter.txt", "w", encoding="utf-8")
-    stats.write(f'{"Title":<40} {"Time":<25}\n')
+    stats.write(f'{"Title":<80} {"Time":<25}\n')
 
     streams = process_files()
     for title in streams:
@@ -28,11 +28,11 @@ if __name__ == "__main__":
         counter, processing_time = exact_counter(streams[title])
 
         # Store processing time
-        stats.write(f'{title + ":":<40} {processing_time:<25}\n')
+        stats.write(f'{title + ":":<80} {processing_time:<25}\n')
 
         # Store the exact counters
         with open(
-            "counters/exact_counters/" + title + ".txt", "w", encoding="utf8"
+            "counters/exact_counter/" + title + ".txt", "w", encoding="utf8"
         ) as file:
             file.write(json.dumps(counter))
 

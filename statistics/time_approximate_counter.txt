@@ -1,4 +1,4 @@
-Title                                    Time                     
-La venganza de Don Mendo:                0.0011055424928665162    
-O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias: 0.0038211454629898073    
-The Tragedy of Romeo and Juliet:         0.001372497844696045     
+Title                                                                            Time                     
+La venganza de Don Mendo:                                                        0.0011041983366012573    
+O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias:                    0.0038109827041625977    
+The Tragedy of Romeo and Juliet:                                                 0.0013857473134994507    
