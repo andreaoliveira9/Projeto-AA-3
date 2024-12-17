@@ -1,4 +1,4 @@
-Top 14 letters (Exact Counter):
+Top 14 words (Exact Counter):
 d: 483
 n: 395
 tinha: 283
@@ -14,7 +14,7 @@ homem: 124
 olhos: 122
 havia: 108
 
-Top 14 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 revelações: 1
 m: 1
 c: 1
@@ -25,5 +25,5 @@ livro: 1
 original: 1
 chorar: 1
 
-Accurate letters: 0/14
-Accuracy: 0.0%
+Accurate words: 0/14
+Accuracy: 0.00%

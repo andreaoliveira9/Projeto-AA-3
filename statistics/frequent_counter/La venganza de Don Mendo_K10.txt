@@ -1,4 +1,4 @@
-Top 9 letters (Exact Counter):
+Top 9 words (Exact Counter):
 mendo: 286
 don: 246
 magdalena: 205
@@ -9,9 +9,9 @@ alfonso: 75
 ramírez: 72
 azofaifa: 63
 
-Top 9 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 pesetas: 32
 p: 23
 
-Accurate letters: 1/9
-Accuracy: 11.11111111111111%
+Accurate words: 1/9
+Accuracy: 11.11%

@@ -1,14 +1,14 @@
-Top 4 letters (Exact Counter):
+Top 4 words (Exact Counter):
 d: 483
 n: 395
 tinha: 283
 elle: 279
 
-Top 4 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 erradas: 1
 livro: 1
 original: 1
 chorar: 1
 
-Accurate letters: 0/4
-Accuracy: 0.0%
+Accurate words: 0/4
+Accuracy: 0.00%

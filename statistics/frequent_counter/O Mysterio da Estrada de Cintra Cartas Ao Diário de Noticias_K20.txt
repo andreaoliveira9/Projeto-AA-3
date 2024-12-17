@@ -1,4 +1,4 @@
-Top 19 letters (Exact Counter):
+Top 19 words (Exact Counter):
 d: 483
 n: 395
 tinha: 283
@@ -19,7 +19,7 @@ aquella: 103
 noite: 96
 luz: 86
 
-Top 19 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 z: 1
 revelações: 1
 m: 1
@@ -35,5 +35,5 @@ livro: 1
 original: 1
 chorar: 1
 
-Accurate letters: 0/19
-Accuracy: 0.0%
+Accurate words: 0/19
+Accuracy: 0.00%

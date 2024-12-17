@@ -1,4 +1,4 @@
-Top 9 letters (Exact Counter):
+Top 9 words (Exact Counter):
 thou: 278
 thy: 178
 d: 164
@@ -9,7 +9,7 @@ o: 137
 loue: 137
 haue: 126
 
-Top 9 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 wo: 1
 iuliet: 1
 romeo: 1
@@ -17,5 +17,5 @@ exeunt: 1
 omnes: 1
 finis: 1
 
-Accurate letters: 1/9
-Accuracy: 11.11111111111111%
+Accurate words: 1/9
+Accuracy: 11.11%

@@ -1,4 +1,4 @@
-Top 19 letters (Exact Counter):
+Top 19 words (Exact Counter):
 mendo: 286
 don: 246
 magdalena: 205
@@ -19,7 +19,7 @@ amor: 43
 p: 38
 clodulfo: 37
 
-Top 19 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 pesetas: 74
 p: 31
 acuden: 1
@@ -33,5 +33,5 @@ pedro: 1
 muñoz: 1
 seca: 1
 
-Accurate letters: 4/19
-Accuracy: 21.052631578947366%
+Accurate words: 4/19
+Accuracy: 21.05%

@@ -1,4 +1,4 @@
-Top 14 letters (Exact Counter):
+Top 14 words (Exact Counter):
 mendo: 286
 don: 246
 magdalena: 205
@@ -14,7 +14,7 @@ vos: 51
 doña: 50
 rey: 49
 
-Top 14 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 pesetas: 61
 p: 29
 acuden: 1
@@ -23,5 +23,5 @@ pedro: 1
 muñoz: 1
 seca: 1
 
-Accurate letters: 1/14
-Accuracy: 7.142857142857142%
+Accurate words: 1/14
+Accuracy: 7.14%

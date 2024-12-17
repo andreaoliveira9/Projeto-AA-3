@@ -1,4 +1,4 @@
-Top 9 letters (Exact Counter):
+Top 9 words (Exact Counter):
 d: 483
 n: 395
 tinha: 283
@@ -9,11 +9,11 @@ disse: 193
 rytmel: 181
 condessa: 154
 
-Top 9 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 erradas: 1
 livro: 1
 original: 1
 chorar: 1
 
-Accurate letters: 0/9
-Accuracy: 0.0%
+Accurate words: 0/9
+Accuracy: 0.00%

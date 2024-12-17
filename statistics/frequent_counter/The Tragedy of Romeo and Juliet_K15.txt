@@ -1,4 +1,4 @@
-Top 14 letters (Exact Counter):
+Top 14 words (Exact Counter):
 thou: 278
 thy: 178
 d: 164
@@ -14,7 +14,7 @@ iul: 97
 enter: 91
 man: 84
 
-Top 14 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 shall: 1
 d: 1
 punished: 1
@@ -27,5 +27,5 @@ exeunt: 1
 omnes: 1
 finis: 1
 
-Accurate letters: 3/14
-Accuracy: 21.428571428571427%
+Accurate words: 3/14
+Accuracy: 21.43%

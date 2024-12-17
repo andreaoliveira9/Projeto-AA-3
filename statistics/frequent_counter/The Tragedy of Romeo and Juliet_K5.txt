@@ -1,11 +1,11 @@
-Top 4 letters (Exact Counter):
+Top 4 words (Exact Counter):
 thou: 278
 thy: 178
 d: 164
 rom: 149
 
-Top 4 letters (Frequent-Count):
+Top {k-1} words (Frequent-Counter):
 finis: 1
 
-Accurate letters: 0/4
-Accuracy: 0.0%
+Accurate words: 0/4
+Accuracy: 0.00%
