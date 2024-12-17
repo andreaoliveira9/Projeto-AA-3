@@ -1,0 +1,11 @@
+Top 4 letters (Exact Counter):
+thou: 278
+thy: 178
+d: 164
+rom: 149
+
+Top 4 letters (Frequent-Count):
+finis: 1
+
+Accurate letters: 0/4
+Accuracy: 0.0%

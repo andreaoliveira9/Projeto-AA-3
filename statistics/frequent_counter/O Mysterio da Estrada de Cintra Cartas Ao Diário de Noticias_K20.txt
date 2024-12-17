@@ -1,0 +1,39 @@
+Top 19 letters (Exact Counter):
+d: 483
+n: 395
+tinha: 283
+elle: 279
+á: 249
+ella: 235
+disse: 193
+rytmel: 181
+condessa: 154
+mim: 145
+casa: 134
+homem: 124
+olhos: 122
+havia: 108
+ha: 106
+vida: 106
+aquella: 103
+noite: 96
+luz: 86
+
+Top 19 letters (Frequent-Count):
+z: 1
+revelações: 1
+m: 1
+c: 1
+ultima: 1
+carta: 1
+notas: 1
+transcrição: 1
+palavras: 1
+aparentemente: 1
+erradas: 1
+livro: 1
+original: 1
+chorar: 1
+
+Accurate letters: 0/19
+Accuracy: 0.0%

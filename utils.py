@@ -10,7 +10,11 @@ def load_stopwords(lang):
 def process_files():
 
     # All books
-    books = [book.replace(".txt", "") for book in os.listdir("Project_Gutenberg")]
+    books = [
+        book.replace(".txt", "")
+        for book in os.listdir("Project_Gutenberg")
+        if book != ".gitkeep"
+    ]
 
     processed_books = {}
 

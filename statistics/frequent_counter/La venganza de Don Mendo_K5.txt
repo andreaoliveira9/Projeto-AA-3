@@ -1,0 +1,11 @@
+Top 4 letters (Exact Counter):
+mendo: 286
+don: 246
+magdalena: 205
+moncada: 128
+
+Top 4 letters (Frequent-Count):
+p: 10
+
+Accurate letters: 0/4
+Accuracy: 0.0%

@@ -1,0 +1,14 @@
+Top 4 letters (Exact Counter):
+d: 483
+n: 395
+tinha: 283
+elle: 279
+
+Top 4 letters (Frequent-Count):
+erradas: 1
+livro: 1
+original: 1
+chorar: 1
+
+Accurate letters: 0/4
+Accuracy: 0.0%

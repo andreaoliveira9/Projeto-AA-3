@@ -1,0 +1,19 @@
+Top 9 letters (Exact Counter):
+d: 483
+n: 395
+tinha: 283
+elle: 279
+á: 249
+ella: 235
+disse: 193
+rytmel: 181
+condessa: 154
+
+Top 9 letters (Frequent-Count):
+erradas: 1
+livro: 1
+original: 1
+chorar: 1
+
+Accurate letters: 0/9
+Accuracy: 0.0%
