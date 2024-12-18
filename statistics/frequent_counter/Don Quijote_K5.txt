@@ -1,11 +1,14 @@
 Top 4 words (Exact Counter):
-mendo: 286
-don: 246
-magdalena: 205
-moncada: 128
+don: 2714
+quijote: 2241
+sancho: 2174
+señor: 1065
 
 Top {k-1} words (Frequent-Counter):
-p: 10
+tropezando: 1
+caer: 1
+duda: 1
+vale: 1
 
 Accurate words: 0/4
 Accuracy: 0.00%

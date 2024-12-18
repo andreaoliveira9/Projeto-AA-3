@@ -1,0 +1,24 @@
+Top 9 words (Exact Counter):
+don: 2714
+quijote: 2241
+sancho: 2174
+señor: 1065
+respondió: 1063
+merced: 900
+caballero: 677
+dios: 531
+señora: 518
+
+Top {k-1} words (Frequent-Counter):
+historias: 1
+libros: 1
+caballerías: 1
+don: 1
+quijote: 1
+tropezando: 1
+caer: 1
+duda: 1
+vale: 1
+
+Accurate words: 2/9
+Accuracy: 22.22%

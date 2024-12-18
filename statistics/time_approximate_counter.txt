@@ -1,4 +1,4 @@
 Title                                                                            Time                     
-La venganza de Don Mendo:                                                        0.0011041983366012573    
-O Mysterio da Estrada de Cintra Cartas Ao Diário de Noticias:                    0.0038109827041625977    
-The Tragedy of Romeo and Juliet:                                                 0.0013857473134994507    
+The Adventures of Sherlock Holmes:                                               0.003995289587974548     
+Os Lusíadas:                                                                     0.0030897003889083863    
+Don Quijote:                                                                     0.015767615747451783     

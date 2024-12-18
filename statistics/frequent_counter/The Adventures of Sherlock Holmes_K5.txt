@@ -1,11 +1,10 @@
 Top 4 words (Exact Counter):
-thou: 278
-thy: 178
-d: 164
-rom: 149
+said: 486
+holmes: 462
+s: 379
+man: 305
 
 Top {k-1} words (Frequent-Counter):
-finis: 1
 
 Accurate words: 0/4
 Accuracy: 0.00%

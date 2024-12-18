@@ -1,0 +1,20 @@
+Top 14 words (Exact Counter):
+said: 486
+holmes: 462
+s: 379
+man: 305
+mr: 275
+little: 269
+think: 174
+room: 171
+know: 170
+shall: 169
+come: 161
+time: 151
+came: 146
+door: 144
+
+Top {k-1} words (Frequent-Counter):
+
+Accurate words: 0/14
+Accuracy: 0.00%

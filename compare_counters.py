@@ -55,7 +55,6 @@ def compare_approximate_counters(title, exact_counters):
     prob = 1 / 16
     expected_value_dict = {word: count * prob for word, count in exact_counters.items()}
     expected_value = sum(expected_value_dict.values())
-    real_value = sum(exact_counters.values())
 
     # Calcular erros
     (
@@ -71,7 +70,7 @@ def compare_approximate_counters(title, exact_counters):
         standard_deviation,
         maximum_deviation,
         variance,
-    ) = calculate_errors(real_value, total_words, expected_value)
+    ) = calculate_errors(total_words, expected_value)
 
     # Ordenar palavras mais frequentes
     most_frequent_words = dict(
@@ -122,7 +121,7 @@ def compare_approximate_counters(title, exact_counters):
             stats.write(f"{word} ")
 
 
-def calculate_errors(real_value, counters, expected_value):
+def calculate_errors(counters, expected_value):
     counters = np.array(counters)
     real_variance = expected_value / 2
     real_standard_deviation = np.sqrt(real_variance)
@@ -131,9 +130,16 @@ def calculate_errors(real_value, counters, expected_value):
     standard_deviation = counters.std()
     mean_absolute_deviation = np.mean(np.abs(counters - mean))
     maximum_deviation = np.max(np.abs(counters - mean))
-    mean_absolute_error = np.mean(np.abs(counters - real_value))
-    mean_relative_error = np.mean(np.abs(counters - real_value) / real_value) * 100
-    mean_accuracy_ratio = mean / expected_value if expected_value != 0 else 0
+
+    # Corrigir cálculos de erro absoluto médio e relativo médio
+    mean_absolute_error = np.mean(np.abs(counters - expected_value))
+    mean_relative_error = (
+        np.mean(np.abs(counters - expected_value) / expected_value) * 100
+    )
+
+    # Razão de acurácia média
+    mean_accuracy_ratio = 100 - (mean_absolute_error / expected_value * 100)
+
     smallest_value = counters.min()
     largest_value = counters.max()
 
