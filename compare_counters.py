@@ -1,6 +1,7 @@
 import json
 import numpy as np
 import os
+from frequent_counter import ALL_K
 
 
 def obtain_exact_counters(title):
@@ -160,9 +161,7 @@ def calculate_errors(counters, expected_value):
 
 
 def compare_frequent_counters(title, exact_counters):
-    all_k = [5, 10, 15, 20]
-
-    for k in all_k:
+    for k in ALL_K:
         with open(
             f"counters/frequent_counter/{title}_K{k}.txt", "r", encoding="utf8"
         ) as file:
@@ -206,7 +205,7 @@ if __name__ == "__main__":
         exact_counters = obtain_exact_counters(book)
 
         # Compare approximate counters
-        compare_approximate_counters(book, exact_counters)
+        # compare_approximate_counters(book, exact_counters)
 
         # Compare data stream counters
         compare_frequent_counters(book, exact_counters)

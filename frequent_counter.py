@@ -2,6 +2,9 @@ from utils import process_files
 import time
 import json
 
+# Set all possible k
+ALL_K = [100, 200, 500]
+
 
 def frequent_counter(stream, k):
 
@@ -43,15 +46,12 @@ if __name__ == "__main__":
     stats = open("statistics/time_frequent_counter.txt", "w", encoding="utf-8")
     stats.write(f'{"Title":<80} {"Time":<25} {"k":<10}\n')
 
-    # Set all possible k
-    all_k = [5, 10, 15, 20]
-
     streams = process_files()
     for title in streams:
 
         counters = []
 
-        for k in all_k:
+        for k in ALL_K:
 
             counter, processing_time = frequent_counter(streams[title], k)
             stats.write(f'{title + ":":<80} {processing_time:<25} {k:<10}\n')

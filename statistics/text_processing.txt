@@ -1,3 +1,4 @@
 Title                                    Initial Length            Final Length
 The Adventures of Sherlock Holmes        581564                    275736
 Os Lusíadas                              337641                    197673
+Don Quijote                              2130020                   1117206
