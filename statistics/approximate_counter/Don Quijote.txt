@@ -4,7 +4,7 @@ Standard deviation: 67.56455246651161
 
 Mean absolute error: 73.7811375
 Mean relative error: 0.81%
-Mean accuracy ratio: 100.01%
+Mean accuracy ratio: 99.19%
 
 Smallest counter value: 8774
 Largest counter value: 9504
