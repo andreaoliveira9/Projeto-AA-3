@@ -130,4 +130,6 @@ dmypy.json
 
 .idea
 
+.DS_Store
+
 counters/approximate_counter
