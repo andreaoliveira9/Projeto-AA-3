@@ -1,10 +1,10 @@
 Title                                                                            Time                      k         
-The Adventures of Sherlock Holmes:                                               0.006733894348144531      100       
-The Adventures of Sherlock Holmes:                                               0.006632328033447266      200       
-The Adventures of Sherlock Holmes:                                               0.006640911102294922      500       
-Os Lusíadas:                                                                     0.0046939849853515625     100       
-Os Lusíadas:                                                                     0.004651069641113281      200       
-Os Lusíadas:                                                                     0.00502324104309082       500       
-Don Quijote:                                                                     0.024914979934692383      100       
-Don Quijote:                                                                     0.02460002899169922       200       
-Don Quijote:                                                                     0.025968074798583984      500       
+The Adventures of Sherlock Holmes:                                               0.0070798397064208984     100       
+The Adventures of Sherlock Holmes:                                               0.007016897201538086      200       
+The Adventures of Sherlock Holmes:                                               0.007129192352294922      500       
+Os Lusíadas:                                                                     0.0051021575927734375     100       
+Os Lusíadas:                                                                     0.00465703010559082       200       
+Os Lusíadas:                                                                     0.0050411224365234375     500       
+Don Quijote:                                                                     0.025033950805664062      100       
+Don Quijote:                                                                     0.025233983993530273      200       
+Don Quijote:                                                                     0.026027679443359375      500       
