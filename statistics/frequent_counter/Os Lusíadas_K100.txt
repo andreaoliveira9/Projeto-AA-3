@@ -1,4 +1,4 @@
-Top 100 words (Exact Counter):
+Top 99 words (Exact Counter):
 gente: 230
 terra: 222
 rei: 204
@@ -98,9 +98,8 @@ companhia: 27
 sendo: 27
 mares: 26
 reis: 26
-partes: 26
 
-Top 100words (Frequent-Counter):
+Top 99 words (Frequent-Counter):
 olha: 13
 terra: 4
 pera: 4
@@ -174,4 +173,4 @@ ooo: 1
 lusíadas: 1
 
 Accurate words: 11/100
-Accuracy: 11.00%
+Accuracy: 11.11%

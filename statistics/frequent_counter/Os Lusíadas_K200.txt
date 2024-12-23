@@ -1,4 +1,4 @@
-Top 200 words (Exact Counter):
+Top 199 words (Exact Counter):
 gente: 230
 terra: 222
 rei: 204
@@ -198,9 +198,8 @@ coa: 19
 tantos: 19
 deusa: 19
 la: 19
-inimigo: 19
 
-Top 200words (Frequent-Counter):
+Top 199 words (Frequent-Counter):
 gente: 94
 terra: 88
 rei: 73
@@ -234,4 +233,4 @@ ooo: 1
 lusíadas: 1
 
 Accurate words: 16/200
-Accuracy: 8.00%
+Accuracy: 8.04%

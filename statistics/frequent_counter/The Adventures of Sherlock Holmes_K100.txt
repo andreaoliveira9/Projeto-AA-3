@@ -1,4 +1,4 @@
-Top 100 words (Exact Counter):
+Top 99 words (Exact Counter):
 said: 486
 holmes: 462
 s: 379
@@ -98,9 +98,8 @@ hat: 50
 brought: 50
 possible: 50
 home: 48
-understand: 48
 
-Top 100words (Frequent-Counter):
+Top 99 words (Frequent-Counter):
 said: 88
 holmes: 61
 mr: 14
@@ -160,4 +159,4 @@ considerable: 1
 success: 1
 
 Accurate words: 19/100
-Accuracy: 19.00%
+Accuracy: 19.19%

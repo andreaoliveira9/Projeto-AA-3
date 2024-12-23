@@ -1,4 +1,4 @@
-Top 500 words (Exact Counter):
+Top 499 words (Exact Counter):
 gente: 230
 terra: 222
 rei: 204
@@ -498,9 +498,8 @@ empresa: 10
 roma: 10
 cobiça: 10
 cruel: 10
-cercado: 10
 
-Top 500words (Frequent-Counter):
+Top 499 words (Frequent-Counter):
 gente: 178
 terra: 170
 rei: 152
@@ -855,4 +854,4 @@ ooo: 1
 lusíadas: 1
 
 Accurate words: 138/500
-Accuracy: 27.60%
+Accuracy: 27.66%

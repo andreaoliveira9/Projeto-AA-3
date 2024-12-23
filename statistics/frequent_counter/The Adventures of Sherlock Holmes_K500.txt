@@ -1,4 +1,4 @@
-Top 500 words (Exact Counter):
+Top 499 words (Exact Counter):
 said: 486
 holmes: 462
 s: 379
@@ -498,9 +498,8 @@ dropped: 16
 whispered: 16
 taking: 16
 centre: 16
-determined: 16
 
-Top 500words (Frequent-Counter):
+Top 499 words (Frequent-Counter):
 said: 414
 holmes: 390
 s: 307
@@ -893,4 +892,4 @@ considerable: 1
 success: 1
 
 Accurate words: 213/500
-Accuracy: 42.60%
+Accuracy: 42.69%
