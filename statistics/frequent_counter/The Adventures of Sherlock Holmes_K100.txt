@@ -158,5 +158,5 @@ met: 1
 considerable: 1
 success: 1
 
-Accurate words: 19/100
+Accurate words: 19/99
 Accuracy: 19.19%

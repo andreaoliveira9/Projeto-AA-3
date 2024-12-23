@@ -891,5 +891,5 @@ believe: 1
 considerable: 1
 success: 1
 
-Accurate words: 213/500
+Accurate words: 213/499
 Accuracy: 42.69%

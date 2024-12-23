@@ -371,5 +371,5 @@ caer: 1
 duda: 1
 vale: 1
 
-Accurate words: 40/200
+Accurate words: 40/199
 Accuracy: 20.10%

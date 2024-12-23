@@ -232,5 +232,5 @@ mente: 1
 ooo: 1
 lusíadas: 1
 
-Accurate words: 16/200
+Accurate words: 16/199
 Accuracy: 8.04%

@@ -172,5 +172,5 @@ enveja: 1
 ooo: 1
 lusíadas: 1
 
-Accurate words: 11/100
+Accurate words: 11/99
 Accuracy: 11.11%

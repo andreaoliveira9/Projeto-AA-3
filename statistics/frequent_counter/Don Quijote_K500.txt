@@ -948,5 +948,5 @@ tropezando: 1
 caer: 1
 vale: 1
 
-Accurate words: 185/500
+Accurate words: 185/499
 Accuracy: 37.07%

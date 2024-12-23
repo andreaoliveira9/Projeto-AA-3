@@ -201,7 +201,7 @@ def compare_frequent_counters(title, exact_counters):
             accurate_words = len([word for word, _ in top_k_words if word in counters])
             accuracy = accurate_words / (k - 1)
 
-            stats.write(f"\nAccurate words: {accurate_words}/{k}\n")
+            stats.write(f"\nAccurate words: {accurate_words}/{k-1}\n")
             stats.write(f"Accuracy: {accuracy * 100:.2f}%\n")
 
 

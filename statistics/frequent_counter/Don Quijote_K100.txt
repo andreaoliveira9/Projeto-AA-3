@@ -180,5 +180,5 @@ caer: 1
 duda: 1
 vale: 1
 
-Accurate words: 15/100
+Accurate words: 15/99
 Accuracy: 15.15%
