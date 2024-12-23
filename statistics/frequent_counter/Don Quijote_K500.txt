@@ -1,4 +1,4 @@
-Top 499 words (Exact Counter):
+Top 500 words (Exact Counter):
 don: 2714
 quijote: 2241
 sancho: 2174
@@ -498,8 +498,9 @@ ingenio: 47
 año: 47
 efeto: 47
 esté: 47
+opinión: 47
 
-Top {k-1} words (Frequent-Counter):
+Top 500words (Frequent-Counter):
 don: 2446
 quijote: 1973
 sancho: 1906
@@ -948,5 +949,5 @@ tropezando: 1
 caer: 1
 vale: 1
 
-Accurate words: 185/499
-Accuracy: 37.07%
+Accurate words: 185/500
+Accuracy: 37.00%

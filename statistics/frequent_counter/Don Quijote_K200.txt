@@ -1,4 +1,4 @@
-Top 199 words (Exact Counter):
+Top 200 words (Exact Counter):
 don: 2714
 quijote: 2241
 sancho: 2174
@@ -198,8 +198,9 @@ diablo: 93
 aposento: 93
 fe: 92
 estando: 92
+brazos: 91
 
-Top {k-1} words (Frequent-Counter):
+Top 200words (Frequent-Counter):
 don: 2015
 quijote: 1542
 sancho: 1482
@@ -371,5 +372,5 @@ caer: 1
 duda: 1
 vale: 1
 
-Accurate words: 40/199
-Accuracy: 20.10%
+Accurate words: 40/200
+Accuracy: 20.00%

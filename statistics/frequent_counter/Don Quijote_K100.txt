@@ -1,4 +1,4 @@
-Top 99 words (Exact Counter):
+Top 100 words (Exact Counter):
 don: 2714
 quijote: 2241
 sancho: 2174
@@ -98,8 +98,9 @@ doncella: 148
 menester: 148
 camila: 148
 palabra: 147
+castillo: 144
 
-Top {k-1} words (Frequent-Counter):
+Top 100words (Frequent-Counter):
 don: 1283
 quijote: 810
 sancho: 794
@@ -180,5 +181,5 @@ caer: 1
 duda: 1
 vale: 1
 
-Accurate words: 15/99
-Accuracy: 15.15%
+Accurate words: 15/100
+Accuracy: 15.00%

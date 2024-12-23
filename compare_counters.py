@@ -182,26 +182,26 @@ def compare_frequent_counters(title, exact_counters):
             counters = json.loads(file.readline())
 
         top_k_words = sorted(exact_counters.items(), key=lambda x: x[1], reverse=True)[
-            : k - 1
+            :k
         ]
 
         with open(
             f"statistics/frequent_counter/{title}_K{k}.txt", "w", encoding="utf8"
         ) as stats:
-            stats.write(f"Top {k-1} words (Exact Counter):\n")
+            stats.write(f"Top {k} words (Exact Counter):\n")
             for word, count in top_k_words:
                 stats.write(f"{word}: {count}\n")
 
-            stats.write("\nTop {k-1} words (Frequent-Counter):\n")
+            stats.write(f"\nTop {k}words (Frequent-Counter):\n")
             for word, count in sorted(
                 counters.items(), key=lambda x: x[1], reverse=True
             ):
                 stats.write(f"{word}: {count}\n")
 
             accurate_words = len([word for word, _ in top_k_words if word in counters])
-            accuracy = accurate_words / (k - 1)
+            accuracy = accurate_words / k
 
-            stats.write(f"\nAccurate words: {accurate_words}/{k-1}\n")
+            stats.write(f"\nAccurate words: {accurate_words}/{k}\n")
             stats.write(f"Accuracy: {accuracy * 100:.2f}%\n")
 
 
@@ -219,7 +219,7 @@ if __name__ == "__main__":
         exact_counters = obtain_exact_counters(book)
 
         # Compare approximate counters
-        compare_approximate_counters(book, exact_counters)
+        # compare_approximate_counters(book, exact_counters)
 
         # Compare data stream counters
         compare_frequent_counters(book, exact_counters)

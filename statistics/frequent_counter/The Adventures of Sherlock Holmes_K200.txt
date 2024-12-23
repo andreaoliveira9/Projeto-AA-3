@@ -1,4 +1,4 @@
-Top 199 words (Exact Counter):
+Top 200 words (Exact Counter):
 said: 486
 holmes: 462
 s: 379
@@ -198,8 +198,9 @@ heavy: 30
 turn: 30
 letter: 30
 ran: 30
+cut: 30
 
-Top {k-1} words (Frequent-Counter):
+Top 200words (Frequent-Counter):
 said: 292
 holmes: 267
 s: 186
@@ -397,5 +398,5 @@ believe: 1
 considerable: 1
 success: 1
 
-Accurate words: 74/199
-Accuracy: 37.19%
+Accurate words: 75/200
+Accuracy: 37.50%
