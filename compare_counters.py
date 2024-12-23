@@ -219,7 +219,7 @@ if __name__ == "__main__":
         exact_counters = obtain_exact_counters(book)
 
         # Compare approximate counters
-        # compare_approximate_counters(book, exact_counters)
+        compare_approximate_counters(book, exact_counters)
 
         # Compare data stream counters
         compare_frequent_counters(book, exact_counters)
