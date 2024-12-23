@@ -1,0 +1,515 @@
+%
+% General structure for the revdetua class:
+%
+\documentclass[shortpaper, portugues, times, mirror]{revdetua}
+%
+% Valid options are:
+%
+%   longpaper --------- \part and \tableofcontents defined
+%   shortpaper -------- \part and \tableofcontents not defined (default)
+%
+%   english ----------- main language is English (default)
+%   portugues --------- main language is Portuguese
+%
+%   draft ------------- draft version
+%   final ------------- final version (default)
+%
+%   times ------------- use times (postscript) fonts for text
+%
+%   mirror ------------ prints a mirror image of the paper (with dvips)
+%
+%   visiblelabels ----- \SL, \SN, \SP, \EL, \EN, etc. defined
+%   invisiblelabels --- \SL, \SN, \SP, \EL, \EN, etc. not defined (default)
+%
+% Note: the final version should use the times fonts
+% Note: the really final version should also use the mirror option
+%
+
+\begin{document}
+
+\Header{1}{1}{Dezembro}{2024}{1}
+% Note: the month must be in Portuguese
+
+\title{Most Frequent Words - Estratégias de Contagem}
+\author{André Oliveira}
+\maketitle
+
+\begin{resumo}
+O desafio de contar palavras num texto é relativamente simples de abordar. Neste relatório, são exploradas três abordagens distintas para esse propósito: uma contagem exata, uma estimativa aproximada e o algoritmo de Misra \& Gries, desenvolvido para identificar os itens mais frequentes em fluxos de dados com um uso eficiente de memória. Estas metodologias foram aplicadas a livros em vários idiomas e analisadas sob diferentes parâmetros, com o objetivo de identificar as condições ideais para a utilização de cada abordagem.
+\end{resumo}
+
+\begin{abstract}
+The challenge of counting words in a text is relatively straightforward to address. This report explores three distinct approaches for this purpose: exact counting, approximate estimation, and the Misra \& Gries algorithm, designed to identify the most frequent items in data streams while optimizing memory usage. These methodologies were applied to books in various languages and analyzed under different parameters to determine the ideal conditions for using each approach.
+\end{abstract}
+
+\begin{keywords}
+Most Frequent Words, Text Processing, Exact Counter, Approximate Counter, Misra-Gries Algorithm, Frequent-Count
+\end{keywords}
+
+\section{Introdução}
+A análise da frequência de palavras num texto é uma prática amplamente utilizada em diversas áreas, como processamento de linguagem natural, análise de dados textuais e até em aplicações como motores de busca e sistemas de recomendação. Automatizar este processo é essencial para lidar com grandes volumes de dados, garantindo eficiência e precisão sem depender do esforço humano.
+
+Existem várias abordagens para resolver este problema, desde métodos tradicionais que percorrem o texto contabilizando as ocorrências de cada palavra, até algoritmos mais avançados que utilizam técnicas probabilísticas ou estratégias de otimização de recursos. Estes métodos permitem não apenas identificar as palavras mais frequentes, mas também adaptar a análise a diferentes contextos, como fluxos contínuos de dados ou textos em múltiplos idiomas.
+
+O desenvolvimento dessas soluções abre possibilidades para realizar testes em larga escala, comparar desempenhos e ajustar os métodos às exigências de cada aplicação. Este processo destaca-se como um passo essencial na compreensão e gestão de grandes volumes de informação textual.
+
+A solução mais simples para contabilizar as palavras seria percorrer todo o texto e acumular as ocorrências de cada palavra, de forma semelhante a uma contagem de votos. Embora este método garanta uma precisão total na identificação da frequência e ordem das letras, pode ser extremamente exigente em termos de memória e processamento, devido ao elevado número de operações de atualização e armazenamento necessárias durante a execução.
+
+Para abordar este problema, foram desenvolvidas duas alternativas adicionais à abordagem já mencionada: uma baseada em probabilidades fixas e outra projetada para otimizar o uso de memória. Ambos os algoritmos foram implementados em Python 3.12, com o respetivo código disponibilizado, que acompanha este documento.
+
+\section{Pré-Processamento de Texto}
+Para testar as três abordagens desenvolvidas, foram utilizadas obras literárias de diferentes idiomas disponíveis no Projeto Gutenberg. As obras selecionadas foram: “Don Quijote” de Miguel de Cervantes Saavedra (espanhol), “Os Lusíadas” de Luís de Camões (português) e “The Adventures of Sherlock Holmes” de Arthur Conan Doyle (inglês). Cada obra foi analisada apenas no idioma original, pois o objetivo é comparar os métodos de contagem e não as diferenças entre idiomas. Estes livros foram escolhidos porque, após o processamento, apresentaram menos partes irrelevantes ou ruídos que pudessem afetar a análise, garantindo assim resultados mais consistentes e confiáveis.
+
+Para uniformizar os textos, os ficheiros passaram por um processo de normalização. Inicialmente, foram removidos os cabeçalhos e rodapés referentes ao Projeto Gutenberg, mantendo apenas o conteúdo principal de cada obra. Em seguida, eliminaram-se palavras comuns (stopwords) e sinais de pontuação, utilizando listas de stopwords específicas para cada idioma, disponíveis na pasta “stopwords” do projeto. Além disso, todas as palavras foram convertidas para letras minúsculas, e os espaços e quebras de linha foram eliminados, criando uma sequência contínua de palavras. Estas etapas de normalização asseguraram que os textos estivessem preparados para a análise, minimizando diferenças indesejadas nos dados e maximizando a precisão da avaliação.
+\begin{lstlisting}
+def load_stopwords(lang):
+    with open(f"stopwords/stopwords_{lang}.txt", encoding="utf8") as file:
+        return file.read().split("\n")
+
+
+def process_files():
+    books = [
+        book.replace(".txt", "")
+        for book in os.listdir("Project_Gutenberg")
+        if book != ".gitkeep"
+    ]
+
+    processed_books = {}
+
+    stats = open("statistics/text_processing.txt", "w", encoding="utf8")
+    stats.write(f'{"Title":<40} {"Initial Length":<25} {"Final Length"}\n')
+
+    for book in books:
+        lang = book[-2:]
+        stopwords = load_stopwords(lang)
+
+        with open("Project_Gutenberg/" + book + ".txt", encoding="utf8") as file:
+            book = book[:-3]
+            text = file.read()
+            initial_length = len(text)
+            header = f"*** START OF THE PROJECT GUTENBERG EBOOK {book.upper()} ***"
+            start = text.find(header) + len(header)
+            footer = f"*** END OF THE PROJECT GUTENBERG EBOOK {book.upper()} ***"
+            end = text.find(footer)
+            text = text[start:end]
+            text = text.replace("[Illustration]", "")
+            punctuation = string.punctuation
+            for char in punctuation:
+                text = text.replace(char, " ")
+            for char in text:
+                if not char.isalpha() and char != " ":
+                    text = text.replace(char, " ")
+            text = " ".join(
+                [word for word in text.split() if word.lower() not in stopwords]
+            )
+            text = text.lower()
+            final_length = len(text)
+            processed_books[book] = text
+
+        stats.write(f"{book:<40} {initial_length:<25} {final_length}\n")
+
+    stats.close()
+
+    return processed_books
+\end{lstlisting}
+
+\section{Contador Exato}
+O contador exato é implementado para calcular com precisão a frequência de cada palavra num fluxo de texto. O funcionamento baseia-se na divisão do texto em palavras individuais e na contabilização das suas ocorrências, utilizando a classe \textit{Counter} da biblioteca \textit{collections}. Esta implementação garante resultados exatos e é particularmente útil para análises que requerem precisão absoluta.
+
+O código responsável por esta funcionalidade é o seguinte:
+\begin{lstlisting}
+def exact_counter(stream):
+    start = time.time()
+    words = stream.split()
+    return Counter(words), time.time() - start
+\end{lstlisting}
+A função \textit{exact\_counter} recebe como entrada um fluxo de texto (\textit{stream}). Inicialmente, regista o tempo de início do processamento com a função \textit{time.time()}. Em seguida, divide o texto em palavras individuais utilizando o método \textit{split}, que separa o texto com base nos espaços. A classe \textit{Counter} é então utilizada para calcular a frequência de cada palavra, retornando um dicionário onde as chaves são palavras e os valores correspondem às suas frequências. Por fim, a função retorna o dicionário gerado e o tempo total de execução, calculado como a diferença entre o tempo atual e o momento de início do processamento.
+
+Esta abordagem é eficaz para determinar as palavras mais frequentes num texto, fornecendo não apenas o resultado, mas também o tempo necessário para o cálculo, o que é útil para avaliar o desempenho do algoritmo em diferentes cenários. Embora seja preciso, é importante considerar que a utilização do \textit{Counter} pode ser limitada por restrições de memória em fluxos de texto extremamente grandes, uma vez que todas as palavras precisam ser carregadas na memória.
+
+\section{Contador Aproximado}
+O contador aproximado é projetado para reduzir o consumo de memória ao custo de sacrificar a precisão dos resultados. Neste caso, foi implementado um algoritmo que utiliza uma probabilidade fixa de 1/16 para contabilizar palavras. A cada palavra do texto, é gerado um número aleatório entre 0 e 1. Caso esse número seja inferior ou igual a 1/16, a palavra é adicionada ou tem a sua contagem incrementada no dicionário responsável pela frequência.
+
+O código que implementa esta funcionalidade é o seguinte:
+\begin{lstlisting}
+def approximate_counter(stream):
+    start = time.time()
+    words = stream.split()
+    counter = {}
+    for word in words:
+        if word not in counter:
+            counter[word] = 0
+
+        prob = 1 / 16
+        if random.random() <= prob:
+            counter[word] += 1
+
+    return counter, time.time() - start
+\end{lstlisting}
+A função \textit{approximate\_counter} inicia registando o tempo de execução com \textit{time.time()}. O fluxo de texto é então dividido em palavras individuais usando o método \textit{split()}. Um dicionário é inicializado para armazenar as contagens. Para cada palavra, se ela ainda não estiver no dicionário, é criada uma entrada com o valor inicial de 0. Com uma probabilidade de \( \frac{1}{16} \), a contagem da palavra é incrementada. No final, a função retorna o dicionário contendo as contagens aproximadas e o tempo total de execução.
+
+Este método tem como principal vantagem a economia de memória, uma vez que se espera armazenar apenas cerca de \( \frac{1}{16} \) das ocorrências de cada palavra. Em termos de armazenamento, isso resulta numa redução significativa no número total de ocorrências registradas, tornando o algoritmo viável para grandes volumes de texto.
+
+Contudo, é importante observar que a pseudoaleatoriedade utilizada pode impactar a precisão das frequências relativas. Em casos de palavras com frequências semelhantes, a ordem resultante pode não refletir a realidade devido à variabilidade introduzida pelo fator aleatório. Para avaliar o impacto dessa imprecisão, os resultados deste contador foram comparados com os do contador exato multiplicados por \( \frac{1}{16} \), verificando a consistência das ordens geradas e a adequação deste método para diferentes cenários.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|} \hline 
+
+\multicolumn{2}{|c|}{\textbf{Espanhol}} & \multicolumn{2}{|c|}{\textbf{Português}} & \multicolumn{2}{|c|}{\textbf{Inglês}} \\ \hline  
+\textbf{Exato} & \textbf{Approx.} & \textbf{Exato} & \textbf{Approx.} & \textbf{Exato} & \textbf{Approx.} \\ \hline  
+don & don & \cellcolor[gray]{0.8}gente& \cellcolor[gray]{0.8}mar& \cellcolor[gray]{0.8}said& \cellcolor[gray]{0.8}s\\ \hline  
+quijote & quijote & \cellcolor[gray]{0.8}terra& \cellcolor[gray]{0.8}céu& holmes& holmes\\ \hline  
+sancho & sancho & \cellcolor[gray]{0.8}rei& \cellcolor[gray]{0.8}gente& \cellcolor[gray]{0.8}s& \cellcolor[gray]{0.8}said\\ \hline  
+\cellcolor[gray]{0.8}señor & \cellcolor[gray]{0.8}merced& \cellcolor[gray]{0.8}mar& \cellcolor[gray]{0.8}terra& \cellcolor[gray]{0.8}man& \cellcolor[gray]{0.8}know\\ \hline  
+\cellcolor[gray]{0.8}respondió& \cellcolor[gray]{0.8}señor& \cellcolor[gray]{0.8}co& \cellcolor[gray]{0.8}rei& mr& mr\\ \hline  
+\cellcolor[gray]{0.8}merced& \cellcolor[gray]{0.8}caballero& \cellcolor[gray]{0.8}mundo& \cellcolor[gray]{0.8}co& \cellcolor[gray]{0.8}little& \cellcolor[gray]{0.8}think\\ \hline  
+\cellcolor[gray]{0.8}caballero& \cellcolor[gray]{0.8}respondió& \cellcolor[gray]{0.8}reino& \cellcolor[gray]{0.8}outro& \cellcolor[gray]{0.8}think& \cellcolor[gray]{0.8}little\\ \hline  
+\cellcolor[gray]{0.8}dios& \cellcolor[gray]{0.8}cosa& \cellcolor[gray]{0.8}céu& \cellcolor[gray]{0.8}armas& room& room\\ \hline  
+\cellcolor[gray]{0.8}señora& \cellcolor[gray]{0.8}dios& \cellcolor[gray]{0.8}forte& \cellcolor[gray]{0.8}ó& \cellcolor[gray]{0.8}know& \cellcolor[gray]{0.8}like\\ \hline  
+\cellcolor[gray]{0.8}cosa& \cellcolor[gray]{0.8}mundo& \cellcolor[gray]{0.8}ó& \cellcolor[gray]{0.8}mundo& \cellcolor[gray]{0.8}shall& \cellcolor[gray]{0.8}yes \\ \hline 
+\end{tabular}
+\caption{10 palavras mais frequentes de cada livro para os contadores exato e aproximado (1 execução).}
+\label{tab:frequencias}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|>{\centering\arraybackslash}p{10mm}|} \hline 
+
+\multicolumn{2}{|c|}{\textbf{Espanhol}} & \multicolumn{2}{|c|}{\textbf{Português}} & \multicolumn{2}{|c|}{\textbf{Inglês}} \\ \hline  
+\textbf{Exato} & \textbf{Approx.} & \textbf{Exato} & \textbf{Approx.} & \textbf{Exato} & \textbf{Approx.} \\ \hline  
+don & don & gente& gente& said& said\\ \hline  
+quijote & quijote & terra& terra& holmes& holmes\\ \hline  
+sancho & sancho & rei& rei& s& s\\ \hline  
+\cellcolor[gray]{0.8}señor & \cellcolor[gray]{0.8}respondió& mar& mar& man& man\\ \hline  
+\cellcolor[gray]{0.8}respondió& \cellcolor[gray]{0.8}señor& co& co& mr& mr\\ \hline  
+merced& merced& mundo& mundo& little& little\\ \hline  
+caballero& caballero& reino& reino& think& think\\ \hline  
+dios& dios& céu& céu& \cellcolor[gray]{0.8}room& \cellcolor[gray]{0.8}know\\ \hline  
+señora& señora& forte& forte& \cellcolor[gray]{0.8}know& \cellcolor[gray]{0.8}room \\ \hline  
+cosa& cosa& ó& ó& shall& shall\\ \hline 
+\end{tabular}
+\caption{10 palavras mais frequentes de cada livro para os contadores exato e aproximado (1000 execuções).}
+\label{tab:frequencias}
+\end{table}
+
+As tabelas apresentadas permitem uma análise detalhada do desempenho dos contadores exato e aproximado, considerando que as células destacadas a cinzento representam palavras cuja ordem ou existência nos resultados aproximados diverge do contador exato.
+
+Na Tabela 1, com apenas uma execução, observa-se que o contador aproximado consegue capturar corretamente algumas palavras mais frequentes, mas apresenta várias discrepâncias em relação ao método exato. Essas discrepâncias, destacadas a cinzento, evidenciam que o fator aleatório do contador aproximado afeta a precisão, demonstrando que uma única execução do contador aproximado não é suficientemente confiável para capturar corretamente todas as frequências ou manter a ordem das palavras mais frequentes.
+
+Na Tabela 2, com 1000 execuções, nota-se uma melhoria significativa. As discrepâncias são muito menos frequentes, indicando que o contador aproximado, com execuções repetidas, consegue convergir para resultados mais alinhados com o contador exato. Embora ainda haja algumas palavras a cinzento, como “room” e “know” no inglês, a maioria das palavras mais frequentes está corretamente posicionada, o que demonstra que o impacto da aleatoriedade diminui com múltiplas execuções. Esse comportamento confirma que a precisão do contador aproximado melhora consideravelmente quando a análise é realizada várias vezes e os resultados são acumulados.
+
+O contador aproximado, apesar das discrepâncias numa única execução, ainda é útil para identificar tendências gerais nas palavras mais frequentes. Entretanto, as palavras destacadas a cinzento evidenciam que ele pode falhar em capturar corretamente a ordem ou mesmo incluir palavras erradas em cenários onde a precisão é essencial. Para mitigar esse problema, múltiplas execuções, como mostrado na Tabela 2, são fundamentais para melhorar a confiabilidade dos resultados.
+
+Em aplicações práticas, o contador aproximado é adequado para situações em que o objetivo é ter uma visão geral das palavras mais frequentes em grandes textos, sem a necessidade de precisão total. No entanto, para análises mais detalhadas ou que dependam de frequências exatas, como validações ou estudos linguísticos rigorosos, o método exato continua sendo indispensável. Assim, cada método deve ser utilizado de acordo com o contexto e os requisitos específicos, com a consciência de que o contador aproximado, embora eficiente em termos de memória e processamento, apresenta limitações evidentes quando utilizado de forma isolada.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Livro}            & \textit{Don Quijote} \\ \hline
+\textbf{Valor esperado}         & 9129.93\\ \hline
+\textbf{Variância real esperado}       & 4564.96\\ \hline
+\textbf{Desvio padrão esperado}   & 67.56\\ \hline
+\textbf{Valor counter}   & 9021\\ \hline
+\textbf{Erro absoluto}   & 108.93\\ \hline
+\textbf{Erro relativo}   & 1.19\%\\ \hline
+\textbf{Precisão}   & 98.81\%\\ \hline
+\textbf{Precisão do Top 10}   & 90\%\\ \hline
+\textbf{Precisão do Top 10 (com ordem)}   & 30\%\\ \hline
+\end{tabular}
+\caption{Resultados para o contador aproximado com 1 execução no livro "Don Quijote".}
+\label{tab:approximate}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Livro}            & \textit{Don Quijote} \\ \hline
+\textbf{Valor esperado}         & 9129.93\\ \hline
+\textbf{Variância esperado}       & 4564.96\\ \hline
+\textbf{Desvio padrão esperado}   & 67.56\\ \hline
+\textbf{Valor médio do counter}   & 9130.82\\ \hline
+\textbf{Erro absoluto médio}   & 76.34\\ \hline
+\textbf{Erro relativo médio}   & 0.84\%\\ \hline
+\textbf{Precisão média}   & 99.16\%\\ \hline
+\textbf{Menor valor do counter}   & 8866\\ \hline
+\textbf{Maior valor do counter}   & 9398\\ \hline
+\textbf{Desvio absoluto médio}   & 76.34\\ \hline
+\textbf{Desvio padrão}   & 94.69\\ \hline
+\textbf{Desvio máximo}   & 267.17\\ \hline
+\textbf{Variância}   & 8967.51\\ \hline
+\textbf{Precisão do Top 10}   & 100\%\\ \hline
+\textbf{Precisão do Top 10 (com ordem)}   & 80\%\\ \hline
+\end{tabular}
+\caption{Resultados para o contador aproximado com 1000 execuções no livro "Don Quijote".}
+\label{tab:approximate}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Book}            & \textit{Os Lusíadas}\\ \hline
+\textbf{Valor esperado}         & 1724.37\\ \hline
+\textbf{Variância real esperado}       & 1662\\ \hline
+\textbf{Desvio padrão esperado}   & 862.18\\ \hline
+\textbf{Valor counter}   & 29.36\\ \hline
+\textbf{Erro absoluto}   & 62.37\\ \hline
+\textbf{Erro relativo}   & 3.62\%\\ \hline
+\textbf{Precisão}   & 96.38\%\\ \hline
+\textbf{Precisão do Top 10}   & 90\%\\ \hline
+\textbf{Precisão do Top 10 (com ordem)}   & 30\%\\ \hline
+\end{tabular}
+\caption{Resultados para o contador aproximado com 1 execução no livro "Os Lusíadas".}
+\label{tab:approximate}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Book}            & \textit{Os Lusíadas}\\ \hline
+\textbf{Valor esperado}         & 1724.37\\ \hline
+\textbf{Variância esperado}       & 862.18\\ \hline
+\textbf{Desvio padrão esperado}   & 29.36\\ \hline
+\textbf{Valor médio do counter}   & 1723.51\\ \hline
+\textbf{Erro absoluto médio}   & 32.06\\ \hline
+\textbf{Erro relativo médio}   & 1.86\%\\ \hline
+\textbf{Precisão média}   & 98.14\%\\ \hline
+\textbf{Menor valor do counter}   & 1581\\ \hline
+\textbf{Maior valor do counter}   & 1866\\ \hline
+\textbf{Desvio absoluto médio}   & 32.07\\ \hline
+\textbf{Desvio padrão}   & 40.05\\ \hline
+\textbf{Desvio máximo}   & 142.51\\ \hline
+\textbf{Variância}   & 1604.32\\ \hline
+\textbf{Precisão do Top 10}   & 100\%\\ \hline
+\textbf{Precisão do Top 10 (com ordem)}   & 100\%\\ \hline
+\end{tabular}
+\caption{Resultados para o contador aproximado com 1000 execuções no livro "Os Lusíadas".}
+\label{tab:approximate}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{2cm}|}
+\hline
+\textbf{Book}            & \textit{The Adventures of Sherlock Holmes}\\ \hline
+\textbf{Valor esperado}         & 2523.75\\ \hline
+\textbf{Variância real esperado}       & 2595\\ \hline
+\textbf{Desvio padrão esperado}   & 1261.87\\ \hline
+\textbf{Valor counter}   & 35.52\\ \hline
+\textbf{Erro absoluto}   & 71.25\\ \hline
+\textbf{Erro relativo}   & 2.82\%\\ \hline
+\textbf{Precisão}   & 97.18\%\\ \hline
+\textbf{Precisão do Top 10}   & 80\%\\ \hline
+\textbf{Precisão do Top 10 (com ordem)}   & 30\%\\ \hline
+\end{tabular}
+\caption{Resultados para o contador aproximado com 1 execução no livro "The Adventures of Sherlock Holmes".}
+\label{tab:approximate}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{2cm}|}
+\hline
+\textbf{Book}            & \textit{The Adventures of  Sherlock Holmes}\\ \hline
+\textbf{Valor esperado}         & 2523.75\\ \hline
+\textbf{Variância esperado}       & 1261.87\\ \hline
+\textbf{Desvio padrão esperado}   & 35.52\\ \hline
+\textbf{Valor médio do counter}   & 2524.18\\ \hline
+\textbf{Erro absoluto médio}   & 39.37\\ \hline
+\textbf{Erro relativo médio}   & 1.56\%\\ \hline
+\textbf{Precisão média}   & 98.44\%\\ \hline
+\textbf{Menor valor do counter}   & 2357\\ \hline
+\textbf{Maior valor do counter}   & 2666\\ \hline
+\textbf{Desvio absoluto médio}   & 39.38\\ \hline
+\textbf{Desvio padrão}   & 49\\ \hline
+\textbf{Desvio máximo}   & 167.18\\ \hline
+\textbf{Variância}   & 2401.42\\ \hline
+\textbf{Precisão do Top 10}   & 100\%\\ \hline
+\textbf{Precisão do Top 10 (com ordem)}   & 80\%\\ \hline
+\end{tabular}
+\caption{Resultados para o contador aproximado com 1000 execuções no livro "The Adventures of Sherlock Holmes".}
+\label{tab:approximate}
+\end{table}
+
+Com base nos resultados apresentados nas tabelas, que consideram o número total de palavras em cada livro, é possível observar um padrão consistente no desempenho do contador aproximado em diferentes obras, tanto com uma única execução quanto com múltiplas execuções. Resultados adicionais, como os obtidos para 10 e 100 iterações, encontram-se disponíveis na pasta \textit{statistics/approximate\_counter} para consulta e análise detalhada.
+
+Numa única execução, o contador aproximado apresenta resultados razoáveis, mas com variações notáveis em relação aos valores esperados. O erro absoluto e o erro relativo mostram que a precisão é limitada, especialmente na ordem das palavras mais frequentes. A precisão do Top 10 é geralmente boa, variando entre 80\% e 90\%, mas a precisão do Top 10 (com ordem) é baixa, em torno de 30\%, indicando dificuldade em capturar a hierarquia correta das palavras. Este comportamento reforça que, numa única execução, o contador aproximado é útil apenas para identificar tendências gerais, mas não para análises que exijam exatidão ou detalhes precisos.
+
+Com 1000 execuções, o contador aproximado apresenta uma melhoria significativa na precisão e consistência dos resultados. O erro absoluto médio diminui consideravelmente, e o erro relativo médio é reduzido, aproximando-se dos valores esperados. A precisão do Top 10 atinge 100\% em 2 dos 3 livros, enquanto a precisão do Top 10 (com ordem) também aumenta significativamente, variando entre 80\% e 100\%. Isso demonstra que múltiplas execuções são eficazes para minimizar o impacto da aleatoriedade do método, permitindo uma análise mais confiável.
+
+Além disso, com múltiplas execuções, observa-se uma maior estabilidade no desempenho. O desvio padrão e a variância dos valores registrados são menores, e os desvios absolutos e máximos indicam que os resultados convergem para valores consistentes. A pequena diferença entre os valores máximos e mínimos também reflete a pouca dispersão nos resultados, tornando o método mais confiável em identificar padrões frequentes.
+
+De maneira geral, o contador aproximado é uma alternativa viável ao contador exato, especialmente em cenários onde há restrições de memória ou processamento. No entanto, o seu desempenho é fortemente dependente do número de execuções. Enquanto uma única execução pode fornecer uma visão geral das palavras mais frequentes, múltiplas execuções são indispensáveis para garantir maior precisão e consistência, aproximando-se dos resultados do contador exato. Assim, o método é ideal para análises exploratórias em grandes volumes de texto, desde que o número de execuções seja suficiente para compensar as limitações da abordagem aproximada.
+
+\section{Algoritmo de Misra-Gries}
+
+O algoritmo Misra-Gries, também conhecido como Frequent-Count, é uma técnica amplamente conhecida para identificar os itens mais frequentes em fluxos de dados. A sua principal característica é ser um algoritmo de passagem única (\textit{one-pass}), o que significa que ele precisa de processar o fluxo de dados apenas uma vez. Esta abordagem torna-o particularmente eficiente e ideal para aplicações em tempo real, como processamento de linguagem natural, indexação de bases de dados e análise de grandes volumes de dados.
+
+Uma variação comum deste algoritmo é o Misra-Gries com parâmetro \(k\), que permite a deteção dos \(k-1\) itens mais frequentes em um fluxos de dados. Para alcançar isso, o algoritmo mantém \(k-1\) contadores, cada um associado a um item potencialmente frequente. Sempre que um item é processado, o contador correspondente é incrementado. Se o item não tiver um contador associado e todos os contadores estiverem ocupados, todos os contadores são decrementados simultaneamente. Este mecanismo assegura que o algoritmo rastreie apenas os \(k-1\) itens mais frequentes, garantindo que nenhum item com frequência igual ou superior a \(\frac{m}{k}\), onde \(m\) é o tamanho total do fluxo, seja ignorado. O parâmetro \(k\), portanto, controla o equilíbrio entre eficiência e qualidade dos resultados.
+
+O grande destaque deste algoritmo é a sua eficiência computacional. Ele consegue processar fluxos de dados de grandes dimensões em questão de milissegundos, tornando-o altamente aplicável em sistemas que exigem processamento em tempo real. Além disso, a sua implementação é relativamente simples, exigindo apenas um número limitado de contadores e operações aritméticas básicas. O código responsável por esta funcionalidade é o seguinte:
+\begin{lstlisting}
+def frequent_counter(stream, k):
+    start = time.time()
+    words = stream.split()
+    counter = {}
+
+    for word in words:
+        if word in counter:
+            counter[word] += 1
+        elif len(counter) < k - 1:
+            counter[word] = 1
+        else:
+            for key in list(counter.keys()):
+                counter[key] -= 1
+                if counter[key] == 0:
+                    del counter[key]
+
+    return counter, time.time() - start
+\end{lstlisting}
+
+Esta simplicidade e eficiência tornam o algoritmo amplamente utilizado em diversas áreas, como processamento de grandes conjuntos de dados e aplicações de alta frequência, onde o tempo de resposta é crítico.
+
+No entanto, como um algoritmo aproximado, o Misra-Gries tem as suas limitações. Ele fornece estimativas das frequências dos itens, em vez de contagens exatas. Essa característica é um compromisso necessário para alcançar alta eficiência, mas pode não ser adequado para aplicações que exigem precisão absoluta nas contagens. Em particular, ele não consegue identificar itens cuja frequência seja muito próxima do limite de deteção \(\frac{m}{k}\), o que pode levar a erros em cenários onde há pouca diferença nas frequências dos itens analisados.
+
+O uso de \(k-1\) contadores torna o algoritmo altamente eficiente em termos de memória, uma vez que o número de contadores cresce linearmente com o parâmetro \(k\). Isto é especialmente útil em contextos onde a memória disponível é restrita, como dispositivos com recursos limitados ou sistemas distribuídos. Além disso, o algoritmo é robusto, adaptando-se bem a fluxos de dados dinâmicos e lidando com grandes dimensões sem a necessidade de armazenar todo o fluxo em memória.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{k} & \textbf{Correct Words} & \textbf{Accuracy} \\ \hline
+100 & 15/99 & 15.15\% \\ \hline
+200 & 40/199 & 20.1\% \\ \hline
+500 & 185/499 & 37.07\% \\ \hline
+\end{tabular}
+\caption{Precisão a determinar as palavras mais frequentes para o livro "Don Quijote"}
+\label{tab:accuracy}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{k} & \textbf{Correct Words} & \textbf{Accuracy} \\ \hline
+100 & 11/99 & 11.11\% \\ \hline
+200 & 16/199 & 8.04\% \\ \hline
+500 & 138/499 & 27.66\% \\ \hline
+\end{tabular}
+\caption{Precisão a determinar as palavras mais frequentes para o livro "Os Lusíadas"}
+\label{tab:accuracy}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{k} & \textbf{Correct Words} & \textbf{Accuracy} \\ \hline
+100 & 19/99 & 19.19\% \\ \hline
+200 & 74/199 & 37.19\% \\ \hline
+500 & 213/499 & 42.69\% \\ \hline
+\end{tabular}
+\caption{Precisão a determinar as palavras mais frequentes para o livro "The Adventures of Sherlock Holmes"}
+\label{tab:accuracy}
+\end{table}
+
+Com base nas tabelas apresentadas, é evidente que o desempenho do algoritmo melhora significativamente à medida que o valor de \(k\) aumenta, refletindo uma maior precisão na identificação das palavras mais frequentes em cada livro. Para \(k = 100\), a precisão é baixa em todos os casos, variando de 11.11\% a 19.19\%, indicando que o número de contadores é insuficiente para capturar um conjunto representativo das palavras mais frequentes. À medida que \(k\) aumenta para 200 e 500, observa-se uma melhoria clara, especialmente em livros maiores como \textit{The Adventures of Sherlock Holmes}, onde a precisão alcança 42.69\% para \(k = 500\).
+
+A escolha dos valores de \(k\) reflete a necessidade de ajustar o número de contadores à complexidade e ao tamanho do texto analisado. Livros contêm um grande número de palavras únicas, mas a maioria delas ocorre com baixa frequência. Valores baixos de \(k\) podem ser insuficientes para representar adequadamente as palavras mais frequentes, especialmente em textos mais extensos. Por outro lado, valores mais altos de \(k\) permitem que o algoritmo rastreie um número maior de palavras, capturando com maior precisão aquelas que aparecem frequentemente.
+
+Em resumo, os valores de \(k\) foram escolhidos para balancear eficiência e precisão. Enquanto valores menores são mais econômicos em termos de memória, valores maiores como \(k = 500\) são essenciais para alcançar resultados mais confiáveis, especialmente em livros com maior volume de palavras. Estes resultados confirmam a importância de calibrar \(k\) em função do tamanho e da diversidade do texto analisado.
+
+\section{Tempos de Execução}
+
+Em termos de tempos de execução, os resultados são os seguintes:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Contador}& \textbf{Tempo de Execução}\\ \hline
+Exato& 0.01330113410949707 \\ \hline
+Aproximado (1 iteração)& 0.015590906143188477 \\ \hline
+Aproximado (10 iterações)& 0.01916794776916504 \\ \hline
+Aproximado (100 iterações)& 0.016012599468231203 \\ \hline
+Aproximado (1000 iterações)& 0.015456143379211426 \\ \hline
+Misra-Gries (\(k = 100\))& 0.025033950805664062 \\ \hline
+Misra-Gries (\(k = 200\))& 0.025233983993530273 \\ \hline
+Misra-Gries (\(k = 500\))& 0.026027679443359375 \\ \hline
+\end{tabular}
+\caption{Tempos de execução para os 3 algoritmos de contagem no livro “Don Quijote”}
+\label{tab:accuracy}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Contador}& \textbf{Tempo de Execução}\\ \hline
+Exato& 0.0023529529571533203 \\ \hline
+Aproximado (1 iteração)& 0.0030939579010009766 \\ \hline
+Aproximado (10 iterações)& 0.00301663875579834 \\ \hline
+Aproximado (100 iterações)& 0.0033066272735595703 \\ \hline
+Aproximado (1000 iterações)& 0.0032349305152893065 \\ \hline
+Misra-Gries (\(k = 100\))& 0.0051021575927734375 \\ \hline
+Misra-Gries (\(k = 200\))& 0.00465703010559082 \\ \hline
+Misra-Gries (\(k = 500\))& 0.0050411224365234375 \\ \hline
+\end{tabular}
+\caption{Tempos de execução para os 3 algoritmos de contagem no livro “Os Lusíadas”}
+\label{tab:accuracy}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Contador}& \textbf{Tempo de Execução}\\ \hline
+Exato& 0.0031981468200683594 \\ \hline
+Aproximado (1 iteração)& 0.0042269229888916016 \\ \hline
+Aproximado (10 iterações)& 0.0039055347442626953 \\ \hline
+Aproximado (100 iterações)& 0.003934671878814697 \\ \hline
+Aproximado (1000 iterações)& 0.003959594249725341 \\ \hline
+Misra-Gries (\(k = 100\))& 0.0070798397064208984 \\ \hline
+Misra-Gries (\(k = 200\))& 0.007016897201538086 \\ \hline
+Misra-Gries (\(k = 500\))& 0.007129192352294922 \\ \hline
+\end{tabular}
+\caption{Tempos de execução para os 3 algoritmos de contagem no livro “The Adventures of Sherlock Holmes”}
+\label{tab:accuracy}
+\end{table}
+
+Com base nos tempos de execução apresentados nas tabelas, observa-se que as diferenças entre os algoritmos são relativamente pequenas, independentemente do contador utilizado ou do valor de \(k\). Isso ocorre devido ao tamanho relativamente reduzido dos livros analisados. Em dados de menor escala, a sobrecarga computacional dos contadores aproximados e do algoritmo Misra-Gries é marginal, resultando em tempos semelhantes ao do contador exato.
+
+No entanto, em volumes de dados significativamente maiores, essas diferenças seriam mais evidentes. O contador exato teria um aumento expressivo no tempo de execução devido ao armazenamento e processamento de todas as palavras, enquanto os contadores aproximados e o algoritmo Misra-Gries, que utilizam abordagens otimizadas com menor uso de memória, manteriam maior eficiência. Assim, a escolha do algoritmo deve levar em consideração o volume de dados a ser processado, sendo os contadores aproximados e o Misra-Gries preferidos para fluxos de dados extensos.
+
+\section{Conclusão}
+
+Com base nas análises realizadas ao longo deste relatório, conclui-se que as três abordagens estudadas – contador exato, contador aproximado e algoritmo de Misra-Gries – possuem características complementares e podem ser aplicadas de forma estratégica, dependendo das exigências específicas do problema e das limitações de recursos computacionais.
+
+O contador exato é a abordagem mais precisa e ideal para cenários em que a exatidão total é indispensável, como em análises linguísticas rigorosas ou validações de frequência. No entanto, o elevado consumo de memória e o aumento significativo do tempo de execução em fluxos de dados extensos limitam a sua aplicabilidade em grandes volumes de texto.
+
+Por outro lado, o contador aproximado demonstra ser uma alternativa eficiente em termos de memória e processamento, especialmente para análises exploratórias onde a precisão absoluta não é crucial. Contudo, a precisão da abordagem aproximada depende diretamente do número de iterações realizadas. Enquanto uma única execução apresenta resultados inconsistentes, múltiplas execuções aumentam significativamente a confiabilidade e a estabilidade dos resultados, aproximando-se dos valores do contador exato.
+
+O algoritmo de Misra-Gries destaca-se como uma solução intermediária, combinando eficiência e simplicidade. A sua capacidade de rastrear os itens mais frequentes com um número limitado de contadores torna-o particularmente útil para grandes fluxos de dados ou dispositivos com restrições de memória. Apesar de ser uma abordagem aproximada, o controlo por meio do parâmetro \(k\) permite ajustar a qualidade dos resultados às necessidades do problema em questão.
+
+A análise dos tempos de execução evidencia que as diferenças entre os algoritmos são mínimas em livros de menor escala, mas tornam-se significativas em volumes de dados maiores. O contador exato apresenta uma sobrecarga computacional considerável em cenários de alta escala, enquanto o Misra-Gries e o contador aproximado mantêm alta eficiência, mesmo sob cargas mais exigentes.
+
+Em resumo, a escolha do algoritmo deve ser guiada pelos requisitos da aplicação. Para cenários que exigem precisão absoluta, o contador exato é indispensável. No entanto, para análises exploratórias ou contextos com limitações de recursos, o contador aproximado e o Misra-Gries são alternativas robustas e eficientes. Este estudo destaca a importância de calibrar os parâmetros dos algoritmos e adaptar a abordagem ao tamanho e à complexidade dos dados, maximizando a eficiência e a qualidade das análises realizadas.
+
+\begin{thebibliography}{2}
+
+\bibitem{}
+\url{AA_2425_Trab_3}
+
+\bibitem{}
+\url{AA 09 Probabilistic Counters Ficheiro}
+
+\bibitem{}
+\url{AA 11 Data Stream Algorithms I Ficheiro}
+\end{thebibliography}
+
+\end{document}
