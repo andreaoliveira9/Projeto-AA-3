@@ -35,6 +35,7 @@
     justification=centering, % Centraliza a legenda
 }
 \usepackage{float}
+\usepackage{makecell}
 
 \setlength\paperheight{297mm}
 \setlength\paperwidth {210mm}
